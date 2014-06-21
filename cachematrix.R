@@ -1,17 +1,21 @@
-# Example usage:
-# > x <- matrix(rnorm(16), nrow = 4)          // Create a matrix x
-# > cx <- makeCacheMatrix(x)                  // Create our special matrix
-# > cx$get()                                  // Return the matrix
-# > cacheSolve(cx)                            // Return the inverse
-# > cacheSolve(cx)                            // Call the 2nd time, so return
-#                                             // the cached inverse
+#Programming Assignment 2: This R script contains two functions:
+#
+#Write the following functions:
+#  
+# makeCacheMatrix: This function creates a special "matrix" object that can cache its inverse.
+# cacheSolve: This function computes the inverse of the special "matrix" returned by makeCacheMatrix above. 
+# If the inverse has already been calculated then the cachesolve should retrieve the inverse from the cache.
+
+# Usage:      
+# > mat <- makeCacheMatrix(matrix(rnorm(64), nrow = 8))                  
+# > mat$get()                                  
+# > cacheSolve(mat)                            
+# > cacheSolve(mat)                            
 
 
-# makeCacheMatrix: return a list of functions to:
-# 1. Set the value of the matrix
-# 2. Get the value of the matrix
-# 3. Set the value of the inverse
-# 4. Get the value of the inverse
+# makeCacheMatrix: Function that Creates and special matrix 
+# that can store its inverse in cache (with setinv)
+
 makeCacheMatrix <- function(x = matrix()) {
   # inv will store the cached inverse matrix
   inv <- NULL
@@ -35,23 +39,17 @@ makeCacheMatrix <- function(x = matrix()) {
 
 
 # cacheSolve: Compute the inverse of the matrix. If the inverse is already
-# calculated before, it returns the cached inverse.
+# calculated, returns the cached inverse.
 cacheSolve <- function(x, ...) {
   inv <- x$getinv()
-  
-  # If the inverse is already calculated, return it
+  #Check if the inverse is already calculated, if so, return it
   if (!is.null(inv)) {
     message("getting cached data")
     return(inv)
   }
-  
-  # The inverse is not yet calculated, so we calculate it
+  # If not, then calculate it
   data <- x$get()
   inv <- solve(data, ...)
-  
-  # Cache the inverse
   x$setinv(inv)
-  
-  # Return it
   inv
 }
